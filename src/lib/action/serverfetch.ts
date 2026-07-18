@@ -1,5 +1,6 @@
-import { authClient } from "../auth-client";
 
+import { auth } from "@/lib/auth"; // যেখানে betterAuth() init করা
+import { headers } from "next/headers";
 
 
 
@@ -7,9 +8,14 @@ import { authClient } from "../auth-client";
 const baseUrl = 'http://localhost:5000'
 
 
+
+
 export const authHeader = async (): Promise<Record<string, string>> => {
-    const { data } = await authClient.getSession(); // hook না, direct call
-    const token = data?.session?.token;
+    const session = await auth.api.getSession({
+        headers: await headers(), // incoming request এর cookie forward করে
+    });
+    const token = session?.session?.token;
+    console.log(token, 'token')
     return token ? { authorization: `Bearer ${token}` } : {};
 }
 
