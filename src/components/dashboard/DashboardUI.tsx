@@ -66,7 +66,8 @@ export function PriorityBadge({ priority }: { priority: TaskPriority }) {
 // ── Status Badge ──────────────────────────────────────────────────────────────
 
 export function StatusBadge({ status }: { status: TaskStatus }) {
-  const { label, bg, text } = STATUS_META[status];
+  const meta = STATUS_META[status] || { label: status || 'Unknown', bg: 'bg-slate-700/60', text: 'text-slate-300' };
+  const { label, bg, text } = meta;
   return (
     <span className={`inline-block px-2 py-0.5 rounded-md text-[11px] font-semibold ${bg} ${text}`}>
       {label}

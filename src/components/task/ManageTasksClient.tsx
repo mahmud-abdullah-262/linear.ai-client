@@ -6,6 +6,7 @@ import { statusChange } from '@/lib/action/statusChange';
 import { toast } from '@heroui/react';
 import { routeModule } from 'next/dist/build/templates/pages';
 import { useRouter } from 'next/navigation';
+import { deleteTask } from '@/lib/action/deleteTask';
 
 
 interface ManageTasksClientProps {
@@ -160,14 +161,26 @@ export default function ManageTasksClient({ tasks, currentUser, initialLoading =
     }
   };
 
-  const handleDeleteTask = (taskId: string) => {
-    console.log(
-      JSON.stringify({
-        action: 'DELETE_TASK',
-        taskId,
-      })
+const handleDeleteTask = async (taskId: string) => {
+  const confirmed = window.confirm('Are you sure you want to delete this task?');
+  if (!confirmed) return;
+
+  try {
+    const result = await deleteTask('/api/deleteTask', taskId);
+
+    if (!result?.success) {
+      throw new Error(result?.message || 'Failed to delete');
+    }
+
+    toast.success('Task deleted successfully');
+    router.refresh();
+  } catch (error) {
+    toast.danger(
+      error instanceof Error ? error.message : 'Failed to delete'
     );
-  };
+   
+  }
+};
 
   // --- AI Co-Pilot Simulation ---
   const handleSendAiMessage = (text: string) => {
@@ -509,6 +522,7 @@ export default function ManageTasksClient({ tasks, currentUser, initialLoading =
           </div>
 
           {/* Context-Aware AI Chat Sidebar (Right 25% Width) */}
+          
           <div
             className={`transition-all duration-300 ${isSidebarOpen ? 'w-full lg:w-1/4' : 'w-10'
               } shrink-0 relative flex flex-col border border-slate-800/80 bg-[#1E293B]/70 rounded-2xl overflow-hidden backdrop-blur-md

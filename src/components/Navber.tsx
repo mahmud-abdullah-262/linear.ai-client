@@ -134,6 +134,10 @@ export default function Navbar({
                                     Workspace
                                     {pathname === "/task/manage" && <span className="absolute bottom-0 left-0 w-full h-[2px] bg-cyan-400 rounded shadow-[0_0_8px_#22d3ee]"></span>}
                                 </Link>
+                                <Link href="/task/add" className={getLinkClass("/task/add")}>
+                                    Add Task
+                                    {pathname === "/task/add" && <span className="absolute bottom-0 left-0 w-full h-[2px] bg-cyan-400 rounded shadow-[0_0_8px_#22d3ee]"></span>}
+                                </Link>
                             </>
                         )}
                     </div>
@@ -247,6 +251,12 @@ export default function Navbar({
                         <>
                             <Link href="/dashboard" onClick={() => setIsOpen(false)} className={getMobileLinkClass("/dashboard")}>
                                 Dashboard
+                            </Link>
+                            <Link href="/task/manage" onClick={() => setIsOpen(false)} className={getMobileLinkClass("/task/manage")}>
+                                Workplace
+                            </Link>
+                            <Link href="/task/add" onClick={() => setIsOpen(false)} className={getMobileLinkClass("/task/add")}>
+                                Add Task
                             </Link>
                             <Link href="/profile" onClick={() => setIsOpen(false)} className={getMobileLinkClass("/profile")}>
                                 Profile
