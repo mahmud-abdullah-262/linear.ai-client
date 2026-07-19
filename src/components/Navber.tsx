@@ -131,7 +131,7 @@ export default function Navbar({
                                     {pathname === "/dashboard" && <span className="absolute bottom-0 left-0 w-full h-[2px] bg-cyan-400 rounded shadow-[0_0_8px_#22d3ee]"></span>}
                                 </Link>
                                 <Link href="/task/manage" className={getLinkClass("/task/manage")}>
-                                    Kanban Board
+                                    Workspace
                                     {pathname === "/task/manage" && <span className="absolute bottom-0 left-0 w-full h-[2px] bg-cyan-400 rounded shadow-[0_0_8px_#22d3ee]"></span>}
                                 </Link>
                             </>

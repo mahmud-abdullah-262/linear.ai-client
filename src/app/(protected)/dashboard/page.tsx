@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
-import { serverFetch } from '@/lib/action/serverfetch';
+import { serverFetch } from '@/lib/action/(core)/serverfetch';
 import type { Task } from '@/types/dashboard';
 import type { CurrentUser } from '@/types/dashboard';
 import DashboardClient from '@/components/dashboard/DashboardClient';

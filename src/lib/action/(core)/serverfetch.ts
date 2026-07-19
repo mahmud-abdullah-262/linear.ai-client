@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 
 
 
-const baseUrl = 'http://localhost:5000'
+const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:5000'
 
 
 

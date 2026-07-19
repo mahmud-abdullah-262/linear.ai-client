@@ -35,7 +35,7 @@ const signup = () => {
 
       if (error) {
         setAuthError(error.message ?? "Signup failed.");
-        toast.warning("Signup Failed!", {
+        toast.danger("Signup Failed!", {
           description: error.message ?? "Signup failed.",
           actionProps: {
             children: "Retry",
@@ -45,14 +45,10 @@ const signup = () => {
         return;
       }
 
-      toast.success("You have successfully signed up!", {
-        description: "You can continue learning with Linear.ai.",
-        actionProps: {
-          children: "Home",
-          className: "bg-success text-success-foreground",
-        },
-      });
-      router.push("/");
+      toast.success("Account created successfully");
+
+      // hard navigation: navbar/session state fresh হয়ে dashboard-এ যাবে
+      window.location.href = "/dashboard";
     } catch (err) {
       console.error(err);
       setAuthError("Something went wrong. Please try again.");
