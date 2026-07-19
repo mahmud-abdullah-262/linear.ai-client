@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Icon } from '@iconify/react';
+import { postTask } from '@/lib/action/postTask';
 
 interface TaskFormData {
   title: string;
@@ -22,12 +23,24 @@ export default function TaskForm({
   isAIAnalyzing = false,
 }: TaskFormProps) {
 
-  // AI ট্রিগার হ্যান্ডলার
-  const handleTriggerAI = async () => {
-    // এখানে আপাতত শর্ট ডেসক্রিপশনটাই ফুল ডেসক্রিপশনে পাস করে দেওয়া হচ্ছে
-    // পরবর্তীতে আপনি এখানে এপিআই কল বা আপনার কাঙ্ক্ষিত লজিক বসাতে পারবেন
-    onChange('fullDescription', formData.shortDescription);
-  };
+// AI ট্রিগার হ্যান্ডলার
+const handleTriggerAI = async () => {
+  try {
+    // ১. টাইটেল ও শর্ট ডেসক্রিপশন মিলিয়ে প্রম্পট তৈরি
+    const promptText = formData.title + ' ' + formData.shortDescription;
+    
+    // ২. স্ট্রিং এর বদলে অবজেক্ট পেলোড হিসেবে পাঠান
+    const response = await postTask('/api/getFullDescription', { text: promptText }, 'POST');
+    
+    // ৩. ব্যাকএন্ড থেকে আসা ফুল ডেসক্রিপশন স্টেট-এ সেট করুন
+    // (ধরে নিচ্ছি ব্যাকএন্ড { success: true, fullDescription: "..." } ফরম্যাটে পাঠাবে)
+    if (response && response.fullDescription) {
+      onChange('fullDescription', response.fullDescription);
+    }
+  } catch (error) {
+    console.error("AI Generation failed:", error);
+  }
+};
 
   // বাটন তখনই এনাবল হবে যখন Title এবং Short Description দুটোই থাকবে
   const isButtonEnabled = formData.title.trim() && formData.shortDescription.trim();
