@@ -19,7 +19,7 @@ export const authHeader = async (): Promise<Record<string, string>> => {
     return token ? { authorization: `Bearer ${token}` } : {};
 }
 
-export const serverFetch = async (path: string) => {
+export const serverFetch = async <T>(path: string) => {
 
     const res = await fetch(`${baseUrl}${path}`, {
         headers: await authHeader()

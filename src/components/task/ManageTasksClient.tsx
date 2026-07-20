@@ -13,6 +13,7 @@ import {
   MotionButton,
   CriticalPulseDot,
 } from '@/components/shared/MotionWrapper';
+import Link from 'next/link';
 
 interface ManageTasksClientProps {
   tasks: Task[];
@@ -486,11 +487,9 @@ export default function ManageTasksClient({ tasks, currentUser, initialLoading =
                                     </div>
 
                                     <MotionButton
-                                      id={`task-details-${task._id}`}
-                                      onClick={() => setSelectedTask(task)}
                                       className="text-[10px] font-bold text-[#06B6D4] hover:text-white px-2 py-1.5 rounded bg-[#06B6D4]/5 hover:bg-[#06B6D4] transition-colors cursor-pointer"
                                     >
-                                      Details
+                                      <Link href={`/task/manage/${task._id}`}>Details</Link>
                                     </MotionButton>
                                   </div>
                                 </motion.div>
