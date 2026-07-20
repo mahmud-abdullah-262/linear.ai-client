@@ -2,34 +2,51 @@
 
 import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
-import { toast } from '@heroui/react';
+import { Spinner, toast } from '@heroui/react';
 import TaskForm from '@/components/task/TaskForm';
 
 
 import { postTask } from '@/lib/action/postTask';
+import { authClient } from '@/lib/auth-client';
+import { redirect } from 'next/navigation';
+import { array } from 'better-auth';
 
 interface TaskFormData {
   title: string;
   shortDescription: string;
   fullDescription: string;
-
+  characterCount: number;
   status: string;
+  priority: string;
 }
 
 
 
-export default function TaskAddPage() {
-  const [formData, setFormData] = useState<TaskFormData>({
+
+export default  function TaskAddPage() {
+  const { data: session, isPending, error } = authClient.useSession();
+    const [formData, setFormData] = useState<TaskFormData>({
     title: '',
     shortDescription: '',
+    characterCount: 0,
     fullDescription: '',
     status: 'Todo',
+    priority: ''
   });
 
  
 
-  const [isAIAnalyzing, setIsAIAnalyzing] = useState<boolean>(false);
+  const [isAIAnalyzing] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+
+
+  if (isPending) return ( <div className='h-screen w-full flex items-center justify-center'><Spinner /> </div>);
+  if (error) return (<div>Error: {error.message}</div>) ;
+  if (!session) return (redirect('/login')) ;
+
+
+
 
   // Handle standard form changes
   const handleFormChange = (field: keyof TaskFormData, value: string) => {
@@ -71,8 +88,10 @@ export default function TaskAddPage() {
       setFormData({
         title: '',
         shortDescription: '',
+        characterCount: 0,
         fullDescription: '',
-        status: 'Todo'
+        status: 'Todo',
+        priority: ''
       });
     }, 1000);
   };
@@ -109,8 +128,10 @@ export default function TaskAddPage() {
                 setFormData({
                   title: '',
                   shortDescription: '',
+                  characterCount: 0,
                   fullDescription: '',
-                  status: 'Todo'
+                  status: 'Todo',
+                  priority: ''
                 })
               }}
               className="px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-900/40 text-slate-300 text-sm font-semibold hover:bg-slate-900 hover:text-white transition-all duration-200"

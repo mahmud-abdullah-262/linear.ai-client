@@ -1,9 +1,10 @@
 import { auth } from "@/lib/auth";
-import { Spinner } from "@heroui/react";
+
 import { headers } from "next/headers";
 
 import ProfilePage from "@/components/ProfileClient";
 import { User } from "../../../../type/AuthUser";
+import { redirect } from "next/navigation";
 
 
 const Page = async () => {
@@ -14,11 +15,7 @@ const Page = async () => {
   const user = session?.user as User | undefined;
 
   if (!user) {
-    return (
-      <div className="flex items-center justify-center bg-gray-800 h-screen w-full py-10">
-        <Spinner />
-      </div>
-    );
+    return redirect('/login')
   }
 
   return (

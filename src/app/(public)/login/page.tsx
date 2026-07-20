@@ -4,9 +4,21 @@ import { useState, FormEvent } from "react";
 import { redirect, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import { signIn } from "@/lib/auth-client";
-import { toast } from "@heroui/react";
+import { authClient, signIn } from "@/lib/auth-client";
+import { Button, toast } from "@heroui/react";
 
+
+const demoUser = 'user5@linear.com'
+const demoPassord = '123456aA'
+const handleDemoLogin = async (e: any) => {
+  if (e) e.preventDefault();
+  console.log('clicked', demoUser, demoPassord)
+  await signIn.email({
+    email: demoUser,
+    password: demoPassord,
+  });
+  window.location.href = "/";
+}
 
 const LoginPage = () => {
   const router = useRouter();
@@ -48,7 +60,10 @@ const LoginPage = () => {
   };
 
   const handleGoogleLogin = async (): Promise<void> => {
-    // await signIn.social({ provider: "google", callbackURL: "/" });
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/dashboard",
+    })
   };
 
   return (
@@ -238,6 +253,7 @@ const LoginPage = () => {
                   </>
                 )}
               </button>
+              <Button onClick={handleDemoLogin} className={'w-full bg-[#0B0F19] border  hover:bg-[#1E293B]'}> Demo login</Button>
 
               {/* Divider */}
               <div className="flex items-center gap-3 my-1">

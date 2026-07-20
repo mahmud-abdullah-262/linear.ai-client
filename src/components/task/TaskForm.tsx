@@ -8,14 +8,18 @@ interface TaskFormData {
   title: string;
   shortDescription: string;
   fullDescription: string;
+  characterCount: number | string;
   status: string;
+  priority: string;
 }
 
 interface TaskFormProps {
   formData: TaskFormData;
-  onChange: (field: keyof TaskFormData, value: string) => void;
-  isAIAnalyzing?: boolean; // প্যারেন্ট থেকে কন্ট্রোল করার জন্য
+  onChange: (field: keyof TaskFormData, value: string | number) => void;
+  isAIAnalyzing?: boolean;
 }
+
+const priorityOptions = ['Low', 'Medium', 'High', 'Critical'];
 
 export default function TaskForm({
   formData,
@@ -23,27 +27,31 @@ export default function TaskForm({
   isAIAnalyzing = false,
 }: TaskFormProps) {
 
-// AI ট্রিগার হ্যান্ডলার
-const handleTriggerAI = async () => {
-  try {
-    // ১. টাইটেল ও শর্ট ডেসক্রিপশন মিলিয়ে প্রম্পট তৈরি
-    const promptText = formData.title + ' ' + formData.shortDescription;
-    
-    // ২. স্ট্রিং এর বদলে অবজেক্ট পেলোড হিসেবে পাঠান
-    const response = await postTask('/api/getFullDescription', { text: promptText }, 'POST');
-    
-    // ৩. ব্যাকএন্ড থেকে আসা ফুল ডেসক্রিপশন স্টেট-এ সেট করুন
-    // (ধরে নিচ্ছি ব্যাকএন্ড { success: true, fullDescription: "..." } ফরম্যাটে পাঠাবে)
-    if (response && response.fullDescription) {
-      onChange('fullDescription', response.fullDescription);
+  // AI ট্রিগার হ্যান্ডলার
+  const handleTriggerAI = async () => {
+    try {
+      // ১. টাইটেল ও শর্ট ডেসক্রিপশন মিলিয়ে প্রম্পট তৈরি
+      const promptText = `${formData.title} ${formData.shortDescription}`;
+
+      // ২. টাইটেল, শর্ট ডেসক্রিপশন এবং ক্যারেক্টার কাউন্ট একসাথে পাঠানো হচ্ছে
+      const payload = {
+        text: promptText,
+        characterCount: Number(formData.characterCount) || 0,
+      };
+
+      const response = await postTask('/api/getFullDescription', payload, 'POST');
+
+      // ৩. ব্যাকএন্ড থেকে আসা ফুল ডেসক্রিপশন স্টেটে সেট করা
+      if (response && response.fullDescription) {
+        onChange('fullDescription', response.fullDescription);
+      }
+    } catch (error) {
+      console.error("AI Generation failed:", error);
     }
-  } catch (error) {
-    console.error("AI Generation failed:", error);
-  }
-};
+  };
 
   // বাটন তখনই এনাবল হবে যখন Title এবং Short Description দুটোই থাকবে
-  const isButtonEnabled = formData.title.trim() && formData.shortDescription.trim();
+  const isButtonEnabled = Boolean(formData.title.trim() && formData.shortDescription.trim());
 
   return (
     <div className="space-y-6 bg-slate-900/40 backdrop-blur-md p-6 rounded-2xl border border-slate-800/80 shadow-xl">
@@ -94,30 +102,40 @@ const handleTriggerAI = async () => {
             <label htmlFor="fullDescription" className="block text-sm font-medium text-slate-300">
               Full Description <span className="text-cyan-500">*</span>
             </label>
-
-            <button
-              type="button"
-              onClick={handleTriggerAI}
-              disabled={!isButtonEnabled || isAIAnalyzing}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-300 ${!isButtonEnabled
-                  ? 'border-slate-800 bg-slate-900/30 text-slate-500 cursor-not-allowed'
-                  : isAIAnalyzing
+            <div className="flex justify-center items-center gap-2">
+              <input
+                id="resultSize"
+                type="number"
+                placeholder="Char count"
+                value={formData.characterCount || ''}
+                onChange={(e) => onChange('characterCount', e.target.value)}
+                className="w-28 bg-slate-950/60 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/80 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-200"
+              />
+              <button
+                type="button"
+                onClick={handleTriggerAI}
+                disabled={!isButtonEnabled || isAIAnalyzing}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all duration-300 ${
+                  !isButtonEnabled
+                    ? 'border-slate-800 bg-slate-900/30 text-slate-500 cursor-not-allowed'
+                    : isAIAnalyzing
                     ? 'border-cyan-500/30 bg-cyan-950/20 text-cyan-400 cursor-wait'
                     : 'border-cyan-500/30 bg-cyan-950/30 text-cyan-400 hover:bg-cyan-500 hover:text-slate-950 hover:border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.15)] hover:shadow-[0_0_20px_rgba(6,182,212,0.4)]'
                 }`}
-            >
-              {isAIAnalyzing ? (
-                <>
-                  <Icon icon="lucide:loader-2" className="animate-spin w-3.5 h-3.5" />
-                  Generating Description...
-                </>
-              ) : (
-                <>
-                  <Icon icon="lucide:sparkles" className="w-3.5 h-3.5" />
-                  Trigger AI Intelligence
-                </>
-              )}
-            </button>
+              >
+                {isAIAnalyzing ? (
+                  <>
+                    <Icon icon="lucide:loader-2" className="animate-spin w-3.5 h-3.5" />
+                    Generating Description...
+                  </>
+                ) : (
+                  <>
+                    <Icon icon="lucide:sparkles" className="w-3.5 h-3.5" />
+                    Trigger AI Intelligence
+                  </>
+                )}
+              </button>
+            </div>
           </div>
 
           <div className="relative">
@@ -136,6 +154,29 @@ const handleTriggerAI = async () => {
               * Enter both Title and Short Description to enable AI generation.
             </p>
           )}
+        </div>
+
+        {/* Priority Select */}
+        <div className="flex flex-col gap-1">
+          <label htmlFor="priority" className="block text-sm font-medium text-slate-300 mb-1">
+            Priority
+          </label>
+          <select
+            id="priority"
+            name="priority"
+            value={formData.priority}
+            onChange={(e) => onChange('priority', e.target.value)}
+            className="w-full bg-slate-950/60 border border-slate-800 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:border-cyan-500/80 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-200"
+          >
+            <option value="" disabled className="bg-slate-900 text-slate-400">
+              Select priority
+            </option>
+            {priorityOptions.map((p) => (
+              <option key={p} value={p} className="bg-slate-900 text-slate-200">
+                {p}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
     </div>

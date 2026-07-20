@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Form, TextField, Label, Input, FieldError, Description, Button, toast } from '@heroui/react';
 import { Icon } from '@iconify/react';
 import { Eye, EyeClosed } from "@gravity-ui/icons";
-import { signUp } from '@/lib/auth-client';
+import { authClient, signUp } from '@/lib/auth-client';
 
 const signup = () => {
   const router = useRouter();
@@ -58,7 +58,10 @@ const signup = () => {
   };
 
   const handleGoogleLogin = async (): Promise<void> => {
-    // await authClient.signIn.social({ provider: "google", callbackURL: "/" });
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/dashboard",
+    })
   };
 
   const validateEmail = (value: string): string | null => {

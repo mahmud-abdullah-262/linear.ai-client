@@ -4,6 +4,8 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight, Check } from "lucide-react";
 import type { JSX } from "react";
+import { Button } from "@heroui/react";
+import { signIn } from "@/lib/auth-client";
 
 /**
  * CtaSection
@@ -28,6 +30,17 @@ const TRUST_INDICATORS: readonly TrustIndicator[] = [
 ];
 
 export default function CtaSection(): JSX.Element {
+    const demoUser = 'user5@linear.com'
+    const demoPassord = '123456aA'
+    const handleDemoLogin = async (e: any) => {
+      if (e) e.preventDefault();
+      console.log('clicked', demoUser, demoPassord)
+      await signIn.email({
+        email: demoUser,
+        password: demoPassord,
+      });
+      window.location.href = "/";
+    }
     return (
         <section
             aria-labelledby="cta-heading"
@@ -103,12 +116,12 @@ export default function CtaSection(): JSX.Element {
                             whileTap={{ scale: 0.97 }}
                             className="w-full sm:w-auto"
                         >
-                            <Link
-                                href="/login"
-                                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-500/50 bg-transparent px-7 py-3.5 text-base font-semibold text-[#F8FAFC] transition-colors hover:border-cyan-400/60 hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400 sm:w-auto"
+                            <Button
+                                onClick={handleDemoLogin}
+                                className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#06B6D4] px-7 py-6.5 text-base font-semibold text-[#1E293B] transition-colors hover:bg-cyan-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400 sm:w-auto"
                             >
                                 Try Demo Account
-                            </Link>
+                            </Button>
                         </motion.div>
                     </div>
 
