@@ -94,6 +94,7 @@ export default  function TaskAddPage() {
         priority: ''
       });
     }, 1000);
+    
   };
 
   return (
