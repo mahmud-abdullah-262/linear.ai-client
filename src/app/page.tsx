@@ -1,27 +1,22 @@
-import React from "react";
 import Banner from "@/components/Banner";
-import Feature from "@/components/Feature";
-import Stats from "@/components/Stats";
+import CtaSection from "@/components/CtaSection";
 import Explainer from "@/components/Explainer";
 import FAQ from "@/components/FAQ";
+import Feature from "@/components/Feature";
+import Stats from "@/components/Stats";
+import TestimonialsSection from "@/components/TestimonialsSection";
+
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1">
-      {/* Hero Banner (exact 65vh) */}
+    <>
       <Banner />
-      
-      {/* Feature Grid */}
       <Feature />
-      
-      {/* Live Stats Mock Chart */}
       <Stats />
-      
-      {/* AI Capabilities Explainer */}
       <Explainer />
-      
-      {/* FAQ Accordion */}
+      <TestimonialsSection />
       <FAQ />
-    </div>
+      <CtaSection />
+    </>
   );
 }

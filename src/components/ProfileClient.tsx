@@ -184,7 +184,7 @@ export default function ProfilePage({ user }: { user: User }) {
                                     setSuccess(false);
                                     setIsEditing(true);
                                 }}
-                                className="w-1/2 bg-vibrant-cyan text-deep-slate font-medium py-2 px-4 rounded-md hover:bg-cyan-400 transition"
+                                className="w-1/2 bg-cyan-400 text-deep-slate font-medium py-2 px-4 rounded-md hover:bg-cyan-400/80 transition"
                             >
                                 Edit Profile
                             </button>
@@ -192,7 +192,7 @@ export default function ProfilePage({ user }: { user: User }) {
                             <button
                                 onClick={onLogout}
                                 disabled={isSigningOut}
-                                className="w-1/2 bg-red-600 text-white font-medium py-2 px-4 rounded-md hover:bg-red-500 transition disabled:opacity-50"
+                                className="w-1/2 bg-red-500 text-white font-medium py-2 px-4 rounded-md hover:bg-red-500 transition disabled:opacity-50"
                             >
                                 {isSigningOut ? "Signing out..." : "Sign Out"}
                             </button>

@@ -40,7 +40,7 @@ const page = async () => {
   }
 
   return (
-    <div>
+    <div className="pt-24 bg-[#0B0F19]">
       <ManageTasksClient tasks={tasks} currentUser={currentUser} initialLoading={false} />
     </div>
   );

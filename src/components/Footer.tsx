@@ -64,23 +64,23 @@ export default function Footer() {
 
                     {/* Links Column 1: Product */}
                     <div className="flex flex-col gap-4 text-sm">
-                        <h4 className="font-bold text-white tracking-wide uppercase text-xs">Product</h4>
+                        <h4 className="font-bold text-white tracking-wide uppercase text-xs">Links</h4>
                         <div className="flex flex-col gap-2.5">
-                            <a href="#" className="hover:text-cyan-400 transition-colors duration-200">Features</a>
-                            <a href="#" className="hover:text-cyan-400 transition-colors duration-200">Integrations</a>
-                            <a href="#" className="hover:text-cyan-400 transition-colors duration-200">Changelog</a>
-                            <a href="#" className="hover:text-cyan-400 transition-colors duration-200">Roadmap</a>
+                            <a href="/" className="hover:text-cyan-400 transition-colors duration-200">Home</a>
+                            <a href="/about" className="hover:text-cyan-400 transition-colors duration-200">About</a>
+                            <a href="/contact" className="hover:text-cyan-400 transition-colors duration-200">Contact</a>
+                           
                         </div>
                     </div>
 
                     {/* Links Column 2: Resources */}
                     <div className="flex flex-col gap-4 text-sm">
-                        <h4 className="font-bold text-white tracking-wide uppercase text-xs">Resources</h4>
+                        <h4 className="font-bold text-white tracking-wide uppercase text-xs">For Users</h4>
                         <div className="flex flex-col gap-2.5">
-                            <a href="#" className="hover:text-cyan-400 transition-colors duration-200">Documentation</a>
-                            <a href="#" className="hover:text-cyan-400 transition-colors duration-200">Guides & Tutorials</a>
-                            <a href="#" className="hover:text-cyan-400 transition-colors duration-200">API Reference</a>
-                            <a href="#" className="hover:text-cyan-400 transition-colors duration-200">Security Status</a>
+                            <a href="/dashboard" className="hover:text-cyan-400 transition-colors duration-200">Dashboard</a>
+                            <a href="/task/manage" className="hover:text-cyan-400 transition-colors duration-200">Workplace</a>
+                            <a href="/task/add" className="hover:text-cyan-400 transition-colors duration-200">Add a Task</a>
+                            <a href="/profile" className="hover:text-cyan-400 transition-colors duration-200">Settings</a>
                         </div>
                     </div>
 
