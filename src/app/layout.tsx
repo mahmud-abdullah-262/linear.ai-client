@@ -4,6 +4,8 @@ import "./globals.css";
 import Navbar from "@/components/Navber";
 import Footer from "@/components/Footer";
 import { Toast } from "@heroui/react";
+import PageTransition from "@/components/shared/PageTransition";
+import SmoothScroll from "@/components/SmoothScroll";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,12 +32,16 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <Toast.Provider />
-        <Navbar />
-        {children}
-        <Footer />
-      </body>
+      <SmoothScroll>
+        <body className="min-h-full flex flex-col">
+          <Toast.Provider />
+          <Navbar />
+          <PageTransition>
+            {children}
+          </PageTransition>
+          <Footer />
+        </body>
+      </SmoothScroll>
     </html>
   );
 }

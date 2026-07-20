@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { AnimatedSection } from "@/components/shared/MotionWrapper";
 
 interface FAQItem {
     question: string;
@@ -69,12 +70,12 @@ export default function FAQ() {
         <section id="faq" className="py-24 bg-[#0B0F19] relative">
             <div className="max-w-4xl mx-auto px-6">
                 {/* Section Header */}
-                <div className="text-center mb-16">
+                <AnimatedSection className="text-center mb-16">
                     <h2 className="text-base font-semibold text-cyan-400 tracking-wider uppercase mb-3 font-mono">Frequently Asked Questions</h2>
                     <p className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
                         Got questions? We have answers.
                     </p>
-                </div>
+                </AnimatedSection>
 
                 {/* FAQ Accordion list */}
                 <div className="rounded-2xl bg-slate-900/30 border border-slate-800/80 px-6 md:px-8 shadow-xl">

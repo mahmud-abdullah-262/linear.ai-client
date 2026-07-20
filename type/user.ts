@@ -4,6 +4,8 @@ export interface user {
   _id: ObjectId,
   name: string,
   email: string,
-  avatar: string,
+  image?: string,
+  createdAt?: string,
+  updatedAt?: string
   role: 'Admin' | 'Member'
 }

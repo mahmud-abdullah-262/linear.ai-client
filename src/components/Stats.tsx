@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { AnimatedSection, AnimatedCard } from "@/components/shared/MotionWrapper";
 
 interface DataPoint {
   day: string;
@@ -62,7 +63,7 @@ export default function Stats() {
     <section id="analytics" className="py-24 bg-[#0B0F19] relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+        <AnimatedSection className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div className="max-w-xl">
             <h2 className="text-base font-semibold text-cyan-400 tracking-wider uppercase mb-3">Live Sprint Analytics</h2>
             <p className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
@@ -83,7 +84,7 @@ export default function Stats() {
               <span className="text-slate-300">AI Task Resolution</span>
             </div>
           </div>
-        </div>
+        </AnimatedSection>
 
         {/* Grid: Chart on Left, Metric Cards on Right */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
@@ -216,7 +217,7 @@ export default function Stats() {
           {/* Metric Stats Cards Stacked */}
           <div className="flex flex-col gap-6 justify-between">
             {/* Stats Card 1 */}
-            <div className="relative group overflow-hidden rounded-2xl bg-slate-900/40 border border-slate-800/80 p-6 flex flex-col justify-between hover:border-cyan-500/30 transition-all duration-300 shadow-xl flex-1">
+            <AnimatedCard delay={0.05} className="relative group overflow-hidden rounded-2xl bg-slate-900/40 border border-slate-800/80 p-6 flex flex-col justify-between hover:border-cyan-500/30 transition-colors duration-300 shadow-xl flex-1">
               <div>
                 <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Sprint Velocity Boost</p>
                 <h4 className="text-4xl font-extrabold text-white mt-2 group-hover:text-cyan-300 transition-colors duration-200">+18%</h4>
@@ -224,10 +225,10 @@ export default function Stats() {
               <p className="text-xs text-slate-400 mt-4 leading-relaxed">
                 Aggressive forecast models yield a significant boost in deliverable commits during each biweekly sprint.
               </p>
-            </div>
+            </AnimatedCard>
 
             {/* Stats Card 2 */}
-            <div className="relative group overflow-hidden rounded-2xl bg-slate-900/40 border border-slate-800/80 p-6 flex flex-col justify-between hover:border-cyan-500/30 transition-all duration-300 shadow-xl flex-1">
+            <AnimatedCard delay={0.12} className="relative group overflow-hidden rounded-2xl bg-slate-900/40 border border-slate-800/80 p-6 flex flex-col justify-between hover:border-cyan-500/30 transition-colors duration-300 shadow-xl flex-1">
               <div>
                 <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">AI Automation Rate</p>
                 <h4 className="text-4xl font-extrabold text-white mt-2 group-hover:text-cyan-300 transition-colors duration-200">74%</h4>
@@ -235,10 +236,10 @@ export default function Stats() {
               <p className="text-xs text-slate-400 mt-4 leading-relaxed">
                 Three out of four issues are automatically generated, structured, and closed via semantic PR linking.
               </p>
-            </div>
+            </AnimatedCard>
 
             {/* Stats Card 3 */}
-            <div className="relative group overflow-hidden rounded-2xl bg-slate-900/40 border border-slate-800/80 p-6 flex flex-col justify-between hover:border-cyan-500/30 transition-all duration-300 shadow-xl flex-1">
+            <AnimatedCard delay={0.19} className="relative group overflow-hidden rounded-2xl bg-slate-900/40 border border-slate-800/80 p-6 flex flex-col justify-between hover:border-cyan-500/30 transition-colors duration-300 shadow-xl flex-1">
               <div>
                 <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Cycle Time Reduction</p>
                 <h4 className="text-4xl font-extrabold text-white mt-2 group-hover:text-cyan-300 transition-colors duration-200">-4.2 Days</h4>
@@ -246,7 +247,7 @@ export default function Stats() {
               <p className="text-xs text-slate-400 mt-4 leading-relaxed">
                 Tickets flow from backlog triage to staging environments significantly faster by stripping administration.
               </p>
-            </div>
+            </AnimatedCard>
           </div>
         </div>
       </div>

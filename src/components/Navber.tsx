@@ -113,7 +113,7 @@ export default function Navbar({
                     </div>
 
                     {/* Desktop Navigation Links */}
-                    <div className="hidden md:flex items-center space-x-8">
+                    <div className="hidden lg:flex items-center space-x-8">
                         <Link href="/" className={getLinkClass("/")}>
                             Home
                             {pathname === "/" && <span className="absolute bottom-0 left-0 w-full h-[2px] bg-cyan-400 rounded shadow-[0_0_8px_#22d3ee]"></span>}
@@ -121,6 +121,10 @@ export default function Navbar({
                         <Link href="/about" className={getLinkClass("/about")}>
                             About
                             {pathname === "/about" && <span className="absolute bottom-0 left-0 w-full h-[2px] bg-cyan-400 rounded shadow-[0_0_8px_#22d3ee]"></span>}
+                        </Link>
+                        <Link href="/contact" className={getLinkClass("/contact")}>
+                            Contact
+                            {pathname === "/contact" && <span className="absolute bottom-0 left-0 w-full h-[2px] bg-cyan-400 rounded shadow-[0_0_8px_#22d3ee]"></span>}
                         </Link>
 
                         {/* লগইন থাকা অবস্থায় অতিরিক্ত লিংক দেখাতে চাইলে এখানে অ্যাড করতে পারেন */}
@@ -143,7 +147,7 @@ export default function Navbar({
                     </div>
 
                     {/* Desktop Auth Button & Profile status */}
-                    <div className="hidden md:flex items-center space-x-4">
+                    <div className="hidden lg:flex items-center space-x-4">
                         {loading ? (
                             <span className="text-xs text-slate-500 animate-pulse">Loading...</span>
                         ) : !user ? (
@@ -196,7 +200,7 @@ export default function Navbar({
                     </div>
 
                     {/* Mobile Hamburger menu button */}
-                    <div className="md:hidden flex items-center">
+                    <div className="lg:hidden flex items-center">
                         <button
                             onClick={() => setIsOpen(!isOpen)}
                             className="inline-flex items-center justify-center p-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 border border-slate-800/80 focus:outline-none transition-all duration-200"
@@ -217,13 +221,16 @@ export default function Navbar({
             </div>
 
             {/* Mobile Drawer Dropdown Menu */}
-            <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-[#0B0F19] border-t border-slate-900 ${isOpen ? "max-h-[450px] shadow-2xl border-b border-slate-850" : "max-h-0"}`}>
+            <div className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out bg-[#0B0F19] border-t border-slate-900 ${isOpen ? "max-h-[450px] shadow-2xl border-b border-slate-850" : "max-h-0"}`}>
                 <div className="px-4 py-4 space-y-2">
                     <Link href="/" onClick={() => setIsOpen(false)} className={getMobileLinkClass("/")}>
                         Home
                     </Link>
                     <Link href="/about" onClick={() => setIsOpen(false)} className={getMobileLinkClass("/about")}>
                         About
+                    </Link>
+                    <Link href="/contact" onClick={() => setIsOpen(false)} className={getMobileLinkClass("/contact")}>
+                        Contact
                     </Link>
 
                     {loading ? (
