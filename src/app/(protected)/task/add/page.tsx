@@ -9,7 +9,7 @@ import TaskForm from '@/components/task/TaskForm';
 import { postTask } from '@/lib/action/postTask';
 import { authClient } from '@/lib/auth-client';
 import { redirect } from 'next/navigation';
-import { array } from 'better-auth';
+
 
 interface TaskFormData {
   title: string;
@@ -48,54 +48,67 @@ export default  function TaskAddPage() {
 
 
 
-  // Handle standard form changes
-  const handleFormChange = (field: keyof TaskFormData, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+  const handleFormChange = (field: keyof TaskFormData, value: string | number) => {
+  setFormData((prev) => ({
+    ...prev,
+    [field]: value,
+  }));
+};
+
+ // Submit Handler
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!formData.title.trim() || !formData.shortDescription.trim() || !formData.fullDescription.trim()) {
+    toast.danger('Missing Fields', {
+      description: 'Please fill in all required fields.',
+    });
+    return;
+  }
+
+  setIsSubmitting(true);
+
+  const payload = {
+    ...formData,
+    createdAt: new Date().toISOString(),
   };
 
-  // Submit Handler
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Central Log Handler requirement
+  console.log('SUBMIT_NEW_TASK_PAYLOAD:', JSON.stringify(payload, null, 2));
 
-    if (!formData.title.trim() || !formData.shortDescription.trim() || !formData.fullDescription.trim()) {
-      toast.danger('Missing Fields', {
-        description: 'Please fill in all required fields.',
+  try {
+    const result = await postTask('/api/addTask', payload, 'POST');
+
+    // ব্যাকএন্ড { success: boolean, ... } রিটার্ন করে — সেটা এখানে চেক করা হচ্ছে
+    if (!result?.success) {
+      toast.danger('Failed to Create Task', {
+        description: result?.message || 'Something went wrong. Please try again.',
       });
       return;
     }
 
-    setIsSubmitting(true);
+    toast.success('Task Created Successfully!', {
+      description: 'The task payload was logged to the console.',
+    });
 
-    const payload = {
-      ...formData,
-      createdAt: new Date().toISOString(),
-    };
-
-    // Central Log Handler requirement
-    console.log('SUBMIT_NEW_TASK_PAYLOAD:', JSON.stringify(payload, null, 2));
-
-    const result = await postTask('/api/addTask', payload, 'POST');
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast.success('Task Created Successfully!', {
-        description: 'The task payload was logged to the console.',
-      });
-
-      // Clear Form on success
-      setFormData({
-        title: '',
-        shortDescription: '',
-        characterCount: 0,
-        fullDescription: '',
-        status: 'Todo',
-        priority: ''
-      });
-    }, 1000);
-    
-  };
+    // Clear Form on success
+    setFormData({
+      title: '',
+      shortDescription: '',
+      characterCount: 0,
+      fullDescription: '',
+      status: 'Todo',
+      priority: '',
+    });
+  } catch (error) {
+    console.error('Error submitting task:', error);
+    toast.danger('Network Error', {
+      description: 'Could not reach the server. Please try again.',
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
