@@ -8,16 +8,16 @@ const getClientToken = async (): Promise<string | undefined> => {
     return data?.session?.token;
 };
 
-export const clientMutate = async (
+export const clientMutate = async <TData = unknown, TPayload = unknown>(
     path: string,
-    payload?: any,
+    payload?: TPayload,
     method: 'POST' | 'PUT' | 'PATCH' | 'DELETE' = 'POST'
-) => {
+): Promise<TData> => {
     const token = await getClientToken();
 
     const res = await fetch(`${baseUrl}${path}`, {
         method,
-        credentials: 'include', // Better Auth এর নিজস্ব session fetch এর জন্য এটা লাগবে (getSession এর জন্য), backend call এ optional
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
             ...(token ? { authorization: `Bearer ${token}` } : {}),
@@ -30,5 +30,5 @@ export const clientMutate = async (
         throw new Error(errorData?.message || `Request failed with status ${res.status}`);
     }
 
-    return res.json();
+    return res.json() as Promise<TData>;
 };

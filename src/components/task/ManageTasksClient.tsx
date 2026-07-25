@@ -32,7 +32,7 @@ export default function ManageTasksClient({ tasks, currentUser, initialLoading =
   } = useTaskBoard({ tasks, currentUser });
 
   const { handleStatusChange, handleDeleteTask } = useTaskActions();
-
+  console.log(currentUser, 'currentuser')
   useEffect(() => {
     if (initialLoading) {
       const timer = setTimeout(() => setIsLoading(false), 1200);
@@ -74,7 +74,7 @@ export default function ManageTasksClient({ tasks, currentUser, initialLoading =
             onDelete={handleDeleteTask}
           />
 
-          <AiCopilotSidebar tasks={tasks} isOpen={isSidebarOpen} onOpenChange={setIsSidebarOpen} />
+          <AiCopilotSidebar tasks={tasks} isOpen={isSidebarOpen} onOpenChange={setIsSidebarOpen} currentUser={currentUser} />
         </div>
       </div>
     </div>

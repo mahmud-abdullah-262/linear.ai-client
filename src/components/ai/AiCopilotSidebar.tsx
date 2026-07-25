@@ -1,19 +1,21 @@
 import { motion } from 'motion/react';
 import { MotionButton } from '@/components/shared/MotionWrapper';
-import type { Task } from '@/types/dashboard';
+import type { CurrentUser, Task } from '@/types/dashboard';
 import { useAiCopilot } from '../../lib/hooks/useAiCopilot';
 import { ChatMessageBubble, TypingIndicator } from './ChatMessageBubble';
+
 
 interface AiCopilotSidebarProps {
   tasks: Task[];
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
+  currentUser: CurrentUser;
 }
 
-export function AiCopilotSidebar({ tasks, isOpen, onOpenChange }: AiCopilotSidebarProps) {
+export function AiCopilotSidebar({ tasks, isOpen, onOpenChange, currentUser }: AiCopilotSidebarProps) {
   const { chatMessages, chatInput, setChatInput, isAiTyping, aiStreamingText, chatEndRef, sendMessage } =
-    useAiCopilot(tasks);
-
+    useAiCopilot(tasks, currentUser);
+  
   return (
     <div
       className={`transition-all duration-300 ${

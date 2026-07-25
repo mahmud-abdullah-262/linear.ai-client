@@ -1,11 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
-import type { Task } from '@/types/dashboard';
+import type { CurrentUser, Task } from '@/types/dashboard';
+import { clientMutate } from '../action/(core)/clientMutate';
 
 export interface ChatMessage {
   id: string;
   sender: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+}
+
+// 🎯 ১. ব্যাকএন্ড থেকে আসা রেসপন্সের টাইপ
+interface CopilotApiResponse {
+  success: boolean;
+  reply?: string;
+  message?: string;
 }
 
 const WELCOME_MESSAGE: ChatMessage = {
@@ -17,36 +25,42 @@ const WELCOME_MESSAGE: ChatMessage = {
 };
 
 /**
- * বর্তমানে board state এর উপর ভিত্তি করে locally একটা rule-based response
- * তৈরি করে। পরবর্তীতে এটা real LLM API কল দিয়ে replace করা যাবে —
- * বাকি UI (AiCopilotSidebar, ChatMessageBubble) touch করা লাগবে না।
+ * ইউজার মেসেজ অনুযায়ী কোন টাস্কগুলো ব্যাকএন্ডে পাঠানো হবে তা ফিল্টার করা
  */
-function generateResponse(text: string, tasks: Task[]): string {
+function preparePayload(text: string, tasks: Task[], currentUser: CurrentUser) {
   const lowerText = text.toLowerCase();
 
-  if (lowerText.includes('block') || lowerText.includes('critical') || lowerText.includes('blockade')) {
-    const criticalTasks = tasks.filter((t) => t.priority === 'Critical' && t.status !== 'Done');
-    if (criticalTasks.length > 0) {
-      return `You currently have ${criticalTasks.length} critical active tasks. Highly recommend unblocking: ${criticalTasks
-        .map((t) => `"${t.title}"`)
-        .join(', ')}.`;
-    }
-    return 'Great news! There are no unresolved tasks designated with Critical priority on the board.';
+  // 🎯 ১. কারেন্ট ইউজারের Assigned Tasks বের করা
+  const myTasks = tasks.filter((t) => {
+    const assigneeId = typeof t.assignedTo === 'object' ? t.assignedTo?._id : t.assignedTo;
+    return assigneeId === currentUser?._id;
+  });
+
+  // 🎯 ২. ক্রিটিক্যাল/ব্লকার সম্পর্কিত মেসেজ হলে শুধু Critical Tasks ফিল্টার করা
+  const isCriticalQuery =
+    lowerText.includes('block') ||
+    lowerText.includes('critical') ||
+    lowerText.includes('blockade');
+
+  let filteredTasks = myTasks;
+
+  if (isCriticalQuery) {
+    filteredTasks = myTasks.filter(
+      (t) => t.priority === 'Critical' && t.status !== 'Done'
+    );
   }
 
-  if (lowerText.includes('progress') || lowerText.includes('summarize')) {
-    const inProgress = tasks.filter((t) => t.status === 'In Progress').length;
-    const done = tasks.filter((t) => t.status === 'Done').length;
-    const backlog = tasks.filter((t) => t.status === 'Backlog').length;
-    const todo = tasks.filter((t) => t.status === 'Todo').length;
-    return `Here is today's progress summary: ${done} completed, ${inProgress} in progress, ${todo} ready to start, and ${backlog} in backlog. Keep pushing!`;
-  }
-
-  return "I've analyzed the current board state. Let me know if you want to drill down into any specific task attributes or assignee workloads.";
+  return {
+    queryType: isCriticalQuery ? 'critical' : 'general_or_summary',
+    tasksToSend: filteredTasks,
+    totalMyTasksCount: myTasks.length,
+  };
 }
 
-export function useAiCopilot(tasks: Task[]) {
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([WELCOME_MESSAGE]);
+export function useAiCopilot(tasks: Task[], currentUser: CurrentUser) {
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    WELCOME_MESSAGE,
+  ]);
   const [chatInput, setChatInput] = useState('');
   const [isAiTyping, setIsAiTyping] = useState(false);
   const [aiStreamingText, setAiStreamingText] = useState('');
@@ -56,7 +70,7 @@ export function useAiCopilot(tasks: Task[]) {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages, aiStreamingText, isAiTyping]);
 
-  const sendMessage = (text: string) => {
+  const sendMessage = async (text: string) => {
     if (!text.trim() || isAiTyping) return;
 
     const userMsg: ChatMessage = {
@@ -65,18 +79,60 @@ export function useAiCopilot(tasks: Task[]) {
       content: text,
       timestamp: new Date(),
     };
+
     setChatMessages((prev) => [...prev, userMsg]);
     setChatInput('');
     setIsAiTyping(true);
 
-    const responseText = generateResponse(text, tasks);
+    // 🎯 ফিল্টার করা পেলোড রেডি করা
+    const { queryType, tasksToSend, totalMyTasksCount } = preparePayload(
+      text,
+      tasks,
+      currentUser
+    );
 
-    setTimeout(() => {
+    // ইউজারকে যদি কোনো টাস্ক অ্যাসাইন না করা থাকে
+    if (totalMyTasksCount === 0) {
       setIsAiTyping(false);
+      setChatMessages((prev) => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'assistant',
+          content: 'You currently have no tasks assigned to you on this board.',
+          timestamp: new Date(),
+        },
+      ]);
+      return;
+    }
+
+    try {
+      // 🚀 clientMutate ব্যবহার করে ব্যাকএন্ডে কল
+      const requestObject = {
+        message: text,
+        queryType,
+        tasks: tasksToSend,
+        userId: currentUser?._id,
+      };
+
+      // 🎯 ২. Generic Type বা Type Assertion দিয়ে data অবজেক্টটি টাইপ-সেফ করা হলো
+      const data = (await clientMutate(
+        '/api/copilot',
+        requestObject,
+        'POST'
+      )) as CopilotApiResponse;
+
+      const responseText =
+        data?.reply || 'Sorry, I could not process your request at this moment.';
+
+      setIsAiTyping(false);
+
+      // ✍️ টাইপিং/স্ট্রিমিং অ্যানিমেশন
       let currentLength = 0;
       const interval = setInterval(() => {
         currentLength += Math.min(5, responseText.length - currentLength);
         setAiStreamingText(responseText.slice(0, currentLength));
+
         if (currentLength >= responseText.length) {
           clearInterval(interval);
           setChatMessages((prev) => [
@@ -91,7 +147,26 @@ export function useAiCopilot(tasks: Task[]) {
           setAiStreamingText('');
         }
       }, 30);
-    }, 1500);
+    } catch (error: unknown) {
+      // 🎯 ৩. catch ব্লকে 'any'-এর বদলে 'unknown' এবং সেফ এরর মেসেজ হ্যান্ডলিং
+      console.error('Error fetching AI response:', error);
+      setIsAiTyping(false);
+
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'An error occurred while connecting to the AI assistant. Please try again.';
+
+      setChatMessages((prev) => [
+        ...prev,
+        {
+          id: Math.random().toString(),
+          sender: 'assistant',
+          content: errorMessage,
+          timestamp: new Date(),
+        },
+      ]);
+    }
   };
 
   return {
