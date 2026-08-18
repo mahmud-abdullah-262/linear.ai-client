@@ -1,6 +1,6 @@
 # ⚡ Linear.ai — Autonomous AI-Powered Agile Management
 
-Linear.ai is a modern, high-performance project management web application built with **Next.js (App Router)**, **TypeScript**, **Tailwind CSS**, and **MongoDB**. It leverages AI-driven task auto-classification, context-aware co-pilots, and role-based access control (Admin & Member) to supercharge developer and team velocity.
+Linear.ai is a modern, high-performance project management web application built with **Next.js (App Router)**, **TypeScript**, **Tailwind CSS**, and **MongoDB**. It leverages AI-driven task auto-classification, context-aware co-pilots, and role-based access control (admin & Member) to supercharge developer and team velocity.
 
 ---
 
@@ -21,7 +21,7 @@ Designed with a sleek, minimalist dark-mode developer aesthetic inspired by mode
 
 ### 1. Dynamic Role-Based Dashboards (`/dashboard`)
 
-* **Admin Interface:** Global project analytics, Recharts velocity breakdowns, critical blocker alerts, and team workload metrics.
+* **admin Interface:** Global project analytics, Recharts velocity breakdowns, critical blocker alerts, and team workload metrics.
 * **Member Interface:** Workload isolation showing strictly assigned tasks, personal active focus items, and personal status distribution.
 
 ### 2. Interactive Kanban Workspace (`/items/manage`)
@@ -50,7 +50,7 @@ Linear.ai /
 ├── app/
 │   ├── page.tsx            # Landing Page (Hero, Features Grid, Testimonials, CTA)
 │   ├── login/              # Authentication & JWT Session Entry
-│   ├── dashboard/          # Role-Based Analytics Dashboard (Admin vs Member)
+│   ├── dashboard/          # Role-Based Analytics Dashboard (admin vs Member)
 │   ├── items/
 │   │   ├── manage/         # Primary Execution Workspace (Kanban + AI Co-pilot)
 │   │   └── add/            # Modular Task Creation Form with AI Auto-Tagging
@@ -90,7 +90,7 @@ interface ITask {
     _id: string;
     name: string;
     avatar: string;
-    role: 'Admin' | 'Member';
+    role: 'admin' | 'Member';
   };
   createdBy: {
     _id: string;

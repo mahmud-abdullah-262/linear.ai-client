@@ -5,11 +5,13 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
 } from 'recharts';
-import type { Task, CurrentUser, StatusChartEntry, TeamLoadEntry } from '@/types/dashboard';
+import type { Task, CurrentUser, StatusChartEntry, TeamLoadEntry, Users } from '@/types/dashboard';
 import {
   MetricCard, SectionCard, TaskRow, EmptyState,
   STATUS_FILL, Avatar,
 } from './DashboardUI';
+import Link from 'next/link';
+import { Button } from '@heroui/react';
 
 // ── Icons ────────────────────────────────────────────────────────────────────
 
@@ -72,9 +74,10 @@ function CustomPieTooltip({ active, payload }: TooltipProps) {
 interface AdminDashboardProps {
   tasks: Task[];
   currentUser: CurrentUser;
+  users : Users | undefined
 }
 
-export function AdminDashboard({ tasks, currentUser }: AdminDashboardProps) {
+export function AdminDashboard({ tasks, currentUser, users }: AdminDashboardProps) {
   // ── Metrics ──
   const total = tasks.length;
   const criticalCount = useMemo(() => tasks.filter((t) => t.priority === 'Critical').length, [tasks]);
@@ -139,7 +142,7 @@ export function AdminDashboard({ tasks, currentUser }: AdminDashboardProps) {
           <Avatar name={currentUser.name} size={7} />
           <div>
             <p className="text-xs font-bold text-[#F8FAFC]">{currentUser.name}</p>
-            <p className="text-[10px] text-cyan-400 uppercase font-semibold tracking-wider">Admin</p>
+            <p className="text-[10px] text-cyan-400 uppercase font-semibold tracking-wider">admin</p>
           </div>
         </div>
       </div>
@@ -244,7 +247,7 @@ export function AdminDashboard({ tasks, currentUser }: AdminDashboardProps) {
         subtitle="Most recently created tasks across all members"
         action={
           <span className="text-[10px] text-cyan-400 font-semibold uppercase tracking-wider border border-cyan-500/30 px-2 py-0.5 rounded-md bg-cyan-950/30">
-            Admin View
+            admin View
           </span>
         }
       >
@@ -304,16 +307,19 @@ export function AdminDashboard({ tasks, currentUser }: AdminDashboardProps) {
                     <td className="py-3 pr-4">
                       <div className="flex items-center gap-2">
                         <Avatar name={task.assignedTo.name} src={task.assignedTo.avatar} size={6} />
-                        <span className="text-[11px] text-slate-300 truncate max-w-[80px]">{task.assignedTo.name}</span>
+                        <span className="text-[11px] text-slate-300 truncate max-w-20">{task.assignedTo.name}</span>
                       </div>
                     </td>
                     <td className="py-3 pr-4">
                       <span className="text-[11px] text-slate-400">{task.createdBy.name}</span>
                     </td>
-                    <td className="py-3">
-                      <button className="text-[10px] font-semibold text-cyan-400 hover:text-cyan-300 border border-cyan-500/30 hover:border-cyan-400/60 px-2 py-1 rounded-md transition-colors bg-cyan-950/20 hover:bg-cyan-950/40">
-                        Manage
-                      </button>
+                    <td className="py-3 space-x-2">
+                      <Link href={`task/manage/${task._id}`} className="text-sm font-semibold text-cyan-400 hover:text-cyan-300 border border-cyan-500/30 hover:border-cyan-400/60 px-4 py-2 rounded-md transition-colors bg-cyan-950/20 hover:bg-cyan-950/40">
+                        Details
+                      </Link>
+                      <Button className="text-sm font-semibold text-cyan-400 hover:text-cyan-300 border border-cyan-500/30 hover:border-cyan-400/60   rounded-md transition-colors bg-cyan-950/20 hover:bg-cyan-950/40">
+                        Re assign
+                      </Button>
                     </td>
                   </tr>
                 ))}

@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { Task, CurrentUser } from '@/types/dashboard';
+import type { Task, CurrentUser, Users } from '@/types/dashboard';
 import { useTaskBoard } from '../../lib/hooks/useTaskBoard';
 import { useTaskActions } from '../../lib/hooks/useTaskActions';
 import { FilterBar } from '../../components/shared/FilterBar';
 import { KanbanBoard } from './KanbanBoard';
 import { AiCopilotSidebar } from '../ai/AiCopilotSidebar';
+
 
 interface ManageTasksClientProps {
   tasks: Task[];
@@ -41,7 +42,7 @@ export default function ManageTasksClient({ tasks, currentUser, initialLoading =
   }, [initialLoading]);
 
   return (
-    <div className="relative h-screen w-full bg-[#0B0F19] text-[#F8FAFC] flex flex-col overflow-hidden">
+    <div className="relative h-auto w-full bg-[#0B0F19] text-[#F8FAFC] flex flex-col overflow-hidden">
       <div
         className="fixed inset-0 pointer-events-none"
         style={{
@@ -51,7 +52,7 @@ export default function ManageTasksClient({ tasks, currentUser, initialLoading =
         }}
       />
 
-      <div className="relative z-10 w-full flex-1 flex flex-col h-full overflow-hidden">
+      <div className="relative z-10 w-full flex-1 flex flex-col h-full ">
         <FilterBar
           currentUser={currentUser}
           searchQuery={searchQuery}

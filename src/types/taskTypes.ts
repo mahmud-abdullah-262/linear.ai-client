@@ -6,7 +6,7 @@ export interface TaskAssignee {
     _id: string;
     name: string;
     avatar: string;
-    role: "Admin" | "Member";
+    role: "admin" | "Member";
 }
 
 export interface TaskCreator {

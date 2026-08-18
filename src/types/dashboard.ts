@@ -2,13 +2,13 @@
 
 export type TaskStatus = 'Backlog' | 'Todo' | 'In Progress' | 'Done';
 export type TaskPriority = 'Low' | 'Medium' | 'High' | 'Critical';
-export type UserRole = 'Admin' | 'Member' | 'user';
+export type UserRole = 'admin' | 'Member' | 'user';
 
 export interface TaskUser {
   _id: string;
   name: string;
   avatar: string;
-  role: 'Admin' | 'Member';
+  role: 'admin' | 'Member';
 }
 
 export interface TaskCreator {
@@ -40,6 +40,10 @@ export interface CurrentUser {
   image?: string;
 }
 
+export interface Users {
+    users: CurrentUser[];
+    total: number;
+}
 // ── Chart Data ────────────────────────────────────────────────────────────────
 
 export interface StatusChartEntry {
@@ -52,3 +56,5 @@ export interface TeamLoadEntry {
   name: string;
   tasks: number;
 }
+
+

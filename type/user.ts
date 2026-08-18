@@ -7,5 +7,5 @@ export interface user {
   image?: string,
   createdAt?: string,
   updatedAt?: string
-  role: 'Admin' | 'Member'
+  role: 'admin' | 'Member'
 }

@@ -10,7 +10,7 @@ import { toast } from "@heroui/react";
 export interface NavbarProps {
     // যদি আপনি চান প্যারেন্ট থেকে সেশন কন্ট্রোল করতে, তবে এগুলোর দরকার আছে। 
     // অন্যথায় সরাসরি এই কম্পোনেন্ট নিজেই এখন অথ সেশন রিড করবে।
-    userRole?: "Admin" | "Member" | "user";
+    userRole?: "admin" | "Member" | "user";
 }
 
 export default function Navbar({
@@ -170,7 +170,7 @@ export default function Navbar({
                             // লগইন অবস্থা: Profile Avatar এবং Sign Out বাটন
                             <div className="flex items-center space-x-6">
                                 <Link href="/profile" className="flex items-center gap-3 group focus:outline-none">
-                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${displayRole === "Admin"
+                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${displayRole === "admin"
                                         ? "bg-cyan-950/40 border-cyan-500/30 text-cyan-400 shadow-[0_0_6px_rgba(6,182,212,0.15)]"
                                         : "bg-slate-900 border-slate-800 text-slate-400"
                                         }`}>

@@ -4,6 +4,8 @@ import { MotionButton, CriticalPulseDot } from '@/components/shared/MotionWrappe
 import type { Task, TaskStatus, CurrentUser } from '@/types/dashboard';
 import { ALL_STATUSES } from '../../lib/constants';
 import { getPriorityStyles } from '../../lib/utils';
+import { ListBox, Select } from '@heroui/react';
+
 
 interface TaskCardProps {
   task: Task;
@@ -23,7 +25,7 @@ export function TaskCard({ task, currentUser, onStatusChange, onDelete }: TaskCa
       <div>
         <div className="flex flex-col items-start gap-2">
           <span
-            className={`text-[10px] px-2 py-0.5 rounded border ${getPriorityStyles(
+            className={`text-sm px-2 py-0.5 rounded border ${getPriorityStyles(
               task.priority
             )} font-semibold shrink-0 inline-flex items-center gap-1`}
           >
@@ -33,22 +35,23 @@ export function TaskCard({ task, currentUser, onStatusChange, onDelete }: TaskCa
             {task.priority}
           </span>
 
-          <h3 className="text-xs font-bold text-[#F8FAFC] group-hover:text-[#06B6D4] transition-colors break-words">
+          <h3 className="text-lg font-bold text-[#F8FAFC] group-hover:text-[#06B6D4] transition-colors wrap-break-word">
             {task.title}
           </h3>
         </div>
 
-        <p className="text-[11px] text-slate-400 mt-2 line-clamp-3">{task.shortDescription}</p>
+        <p className="text-sm text-slate-400 mt-2 line-clamp-3">{task.shortDescription}</p>
       </div>
 
       {/* Status movement controls */}
       <div className="mt-3 pt-3 border-t border-slate-800/50 flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Move Status</span>
-          {currentUser.role === 'Admin' && (
-            <MotionButton
+          <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Move Status</span>
+          {currentUser.role === 'admin' && (
+            <div className='flex flex-col'>
+             <MotionButton
               onClick={() => onDelete(task._id)}
-              className="text-[9px] text-red-400 hover:text-red-300 font-bold flex items-center gap-1 transition-colors cursor-pointer"
+              className="text-sm text-red-400 hover:text-red-300 font-bold flex items-center gap-1 transition-colors cursor-pointer"
               title="Delete Task"
             >
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -61,6 +64,10 @@ export function TaskCard({ task, currentUser, onStatusChange, onDelete }: TaskCa
               </svg>
               Delete
             </MotionButton>
+
+      
+            </div>
+           
           )}
         </div>
         <div className="flex flex-wrap gap-1">
@@ -71,12 +78,13 @@ export function TaskCard({ task, currentUser, onStatusChange, onDelete }: TaskCa
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.96 }}
               transition={{ duration: 0.12 }}
-              className="text-[9px] bg-slate-800 hover:bg-[#06B6D4]/10 text-slate-300 hover:text-[#06B6D4] px-1.5 py-0.5 rounded border border-slate-700/80 hover:border-[#06B6D4]/30 transition-colors cursor-pointer"
+              className="text-sm bg-slate-800 hover:bg-[#06B6D4]/10 text-slate-300 hover:text-[#06B6D4] px-1.5 py-0.5 rounded border border-slate-700/80 hover:border-[#06B6D4]/30 transition-colors cursor-pointer"
             >
               {targetStatus}
             </motion.button>
           ))}
         </div>
+        
       </div>
 
       {/* Assignee & Details footer */}
@@ -92,10 +100,10 @@ export function TaskCard({ task, currentUser, onStatusChange, onDelete }: TaskCa
             )}
           </div>
           <div className="flex flex-col">
-            <span className="text-[10px] text-[#F8FAFC] font-medium leading-none">
+            <span className="text-md text-[#F8FAFC] font-medium leading-none">
               {task.assignedTo?.name || 'Unassigned'}
             </span>
-            <span className="text-[8px] text-slate-500">{task.assignedTo?.role || 'Member'}</span>
+            <span className="text-xs text-slate-500">{task.assignedTo?.role || 'Member'}</span>
           </div>
         </div>
 

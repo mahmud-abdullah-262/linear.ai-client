@@ -21,8 +21,9 @@ interface KanbanColumnProps {
 }
 
 export function KanbanColumn({ status, tasks, isLoading, currentUser, onStatusChange, onDelete }: KanbanColumnProps) {
+
   return (
-    <div className="bg-[#1E293B]/40 border border-slate-800/80 rounded-2xl p-4 flex flex-col h-full min-h-0 overflow-hidden">
+    <div className="bg-[#1E293B]/40 border border-slate-800/80 rounded-2xl p-4 flex flex-col min-h-0 overflow-hidden">
       <div className="flex items-center justify-between mb-4 border-b border-slate-800/60 pb-2 shrink-0">
         <div className="flex items-center gap-2">
           <span className={`w-2 h-2 rounded-full ${STATUS_DOT_COLOR[status]}`} />

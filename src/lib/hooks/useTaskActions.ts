@@ -13,7 +13,7 @@ export function useTaskActions() {
       const result = await statusChange('/api/tasks', data, 'PATCH');
       toast.success(result?.message || 'Task updated successfully!');
       router.refresh();
-    } catch (error) {
+    } catch  {
       toast.danger('Failed to update task status');
     }
   };

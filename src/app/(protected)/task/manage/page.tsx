@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import ManageTasksClient from "@/components/task/ManageTasksClient";
 import { serverFetch } from "@/lib/action/(core)/serverfetch";
-import type { CurrentUser } from "@/types/dashboard";
+import type { CurrentUser} from "@/types/dashboard";
 
 const page = async () => {
   const session = await auth.api.getSession({
@@ -30,6 +30,8 @@ const page = async () => {
     role: (rawUser.role as CurrentUser['role']) ?? 'user',
   };
 
+
+
   let tasks = await serverFetch('/api/tasks');
   console.log(tasks);
 
@@ -38,6 +40,8 @@ const page = async () => {
   } else {
     tasks = [];
   }
+
+
 
   return (
     <div className="pt-24 bg-[#0B0F19]">

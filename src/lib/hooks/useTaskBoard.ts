@@ -25,7 +25,7 @@ export function useTaskBoard({ tasks, currentUser }: UseTaskBoardParams) {
 
   const filteredAndSortedTasks = useMemo(() => {
     let result = [...tasks];
-    if (currentUser.role !== 'Admin') {
+    if (currentUser.role !== 'admin') {
       result = result.filter((t) => t.assignedTo?._id === currentUser._id);
     }
 
