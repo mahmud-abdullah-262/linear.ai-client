@@ -1,20 +1,23 @@
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import { MotionButton, CriticalPulseDot } from '@/components/shared/MotionWrapper';
-import type { Task, TaskStatus, CurrentUser } from '@/types/dashboard';
+import type { Task, TaskStatus, CurrentUser, Users } from '@/types/dashboard';
 import { ALL_STATUSES } from '../../lib/constants';
 import { getPriorityStyles } from '../../lib/utils';
-import { ListBox, Select } from '@heroui/react';
+import Image from 'next/image';
+
 
 
 interface TaskCardProps {
   task: Task;
   currentUser: CurrentUser;
+  users: Users | null;
   onStatusChange: (taskId: string, newStatus: TaskStatus) => void;
   onDelete: (taskId: string) => void;
 }
 
-export function TaskCard({ task, currentUser, onStatusChange, onDelete }: TaskCardProps) {
+export function TaskCard({ task, currentUser, users, onStatusChange, onDelete }: TaskCardProps) {
+  console.log(users, 'users')
   return (
     <motion.div
       whileTap={{ scale: 0.98 }}
@@ -92,7 +95,7 @@ export function TaskCard({ task, currentUser, onStatusChange, onDelete }: TaskCa
         <div className="flex items-center gap-2">
           <div className="relative w-6 h-6 rounded-full overflow-hidden border border-slate-700 bg-slate-800 flex items-center justify-center">
             {task.assignedTo?.avatar ? (
-              <img src={task.assignedTo.avatar} alt={task.assignedTo.name} className="object-cover w-full h-full" />
+              <Image src={task.assignedTo.avatar} alt={task.assignedTo.name} className="object-cover w-full h-full" />
             ) : (
               <span className="text-[10px] font-bold text-slate-300">
                 {task.assignedTo?.name ? task.assignedTo.name.charAt(0) : '?'}

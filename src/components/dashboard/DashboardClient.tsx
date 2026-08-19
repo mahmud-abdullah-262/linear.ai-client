@@ -1,16 +1,16 @@
 'use client';
 
 import React from 'react';
-import type { Task, CurrentUser, Users } from '@/types/dashboard';
+import type { Task, CurrentUser } from '@/types/dashboard';
 import { AdminDashboard, MemberDashboard } from './DashboardViews';
 
 interface DashboardClientProps {
   tasks: Task[];
   currentUser: CurrentUser;
-  users : Users | undefined
+ 
 }
 
-export default function DashboardClient({ tasks, currentUser, users }: DashboardClientProps) {
+export default function DashboardClient({ tasks, currentUser }: DashboardClientProps) {
   const isAdmin = currentUser.role === 'admin';
 
   return (
@@ -27,7 +27,7 @@ export default function DashboardClient({ tasks, currentUser, users }: Dashboard
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-28">
         {isAdmin ? (
-          <AdminDashboard tasks={tasks} currentUser={currentUser} users={users}  />
+          <AdminDashboard tasks={tasks} currentUser={currentUser}   />
         ) : (
           <MemberDashboard tasks={tasks} currentUser={currentUser} />
         )}

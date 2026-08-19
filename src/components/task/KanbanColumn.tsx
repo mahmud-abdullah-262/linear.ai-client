@@ -1,5 +1,5 @@
 import { StaggerList, StaggerItem } from '@/components/shared/MotionWrapper';
-import type { Task, TaskStatus, CurrentUser } from '@/types/dashboard';
+import type { Task, TaskStatus, CurrentUser, Users } from '@/types/dashboard';
 import { columnScrollRef } from '../../lib/utils';
 import { TaskCard } from '../task/TaskCard';
 import { TaskCardSkeletonList } from '../task/TaskCardSkeleton';
@@ -16,11 +16,12 @@ interface KanbanColumnProps {
   tasks: Task[];
   isLoading: boolean;
   currentUser: CurrentUser;
+  users : Users | null;
   onStatusChange: (taskId: string, newStatus: TaskStatus) => void;
   onDelete: (taskId: string) => void;
 }
 
-export function KanbanColumn({ status, tasks, isLoading, currentUser, onStatusChange, onDelete }: KanbanColumnProps) {
+export function KanbanColumn({ status, tasks, isLoading, currentUser, users, onStatusChange, onDelete }: KanbanColumnProps) {
 
   return (
     <div className="bg-[#1E293B]/40 border border-slate-800/80 rounded-2xl p-4 flex flex-col min-h-0 overflow-hidden">
@@ -49,7 +50,7 @@ export function KanbanColumn({ status, tasks, isLoading, currentUser, onStatusCh
             ) : (
               tasks.map((task) => (
                 <StaggerItem key={task._id}>
-                  <TaskCard task={task} currentUser={currentUser} onStatusChange={onStatusChange} onDelete={onDelete} />
+                  <TaskCard task={task} currentUser={currentUser} onStatusChange={onStatusChange} onDelete={onDelete} users={users ??  { users: [], total: 0 }} />
                 </StaggerItem>
               ))
             )}

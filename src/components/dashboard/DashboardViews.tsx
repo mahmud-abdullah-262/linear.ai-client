@@ -5,13 +5,13 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
 } from 'recharts';
-import type { Task, CurrentUser, StatusChartEntry, TeamLoadEntry, Users } from '@/types/dashboard';
+import type { Task, CurrentUser, StatusChartEntry, TeamLoadEntry } from '@/types/dashboard';
 import {
   MetricCard, SectionCard, TaskRow, EmptyState,
   STATUS_FILL, Avatar,
 } from './DashboardUI';
 import Link from 'next/link';
-import { Button } from '@heroui/react';
+
 
 // ── Icons ────────────────────────────────────────────────────────────────────
 
@@ -74,10 +74,10 @@ function CustomPieTooltip({ active, payload }: TooltipProps) {
 interface AdminDashboardProps {
   tasks: Task[];
   currentUser: CurrentUser;
-  users : Users | undefined
+
 }
 
-export function AdminDashboard({ tasks, currentUser, users }: AdminDashboardProps) {
+export function AdminDashboard({ tasks, currentUser }: AdminDashboardProps) {
   // ── Metrics ──
   const total = tasks.length;
   const criticalCount = useMemo(() => tasks.filter((t) => t.priority === 'Critical').length, [tasks]);
@@ -255,7 +255,7 @@ export function AdminDashboard({ tasks, currentUser, users }: AdminDashboardProp
           <EmptyState message="No tasks found" />
         ) : (
           <div className="overflow-x-auto -mx-1">
-            <table className="w-full text-sm min-w-[640px]">
+            <table className="w-full text-sm min-w-160">
               <thead>
                 <tr className="border-b border-slate-800">
                   {['Task', 'Status', 'Priority', 'Assigned To', 'Created By', 'Actions'].map((h) => (
@@ -274,7 +274,7 @@ export function AdminDashboard({ tasks, currentUser, users }: AdminDashboardProp
                     key={task._id}
                     className="border-b border-slate-800/50 last:border-0 hover:bg-slate-800/25 transition-colors"
                   >
-                    <td className="py-3 pr-4 max-w-[180px]">
+                    <td className="py-3 pr-4 max-w-45">
                       <p className="font-semibold text-[#F8FAFC] truncate text-xs">{task.title}</p>
                       <p className="text-slate-500 text-[10px] truncate mt-0.5">{task.shortDescription}</p>
                     </td>
@@ -317,9 +317,7 @@ export function AdminDashboard({ tasks, currentUser, users }: AdminDashboardProp
                       <Link href={`task/manage/${task._id}`} className="text-sm font-semibold text-cyan-400 hover:text-cyan-300 border border-cyan-500/30 hover:border-cyan-400/60 px-4 py-2 rounded-md transition-colors bg-cyan-950/20 hover:bg-cyan-950/40">
                         Details
                       </Link>
-                      <Button className="text-sm font-semibold text-cyan-400 hover:text-cyan-300 border border-cyan-500/30 hover:border-cyan-400/60   rounded-md transition-colors bg-cyan-950/20 hover:bg-cyan-950/40">
-                        Re assign
-                      </Button>
+                   
                     </td>
                   </tr>
                 ))}
@@ -468,7 +466,7 @@ export function MemberDashboard({ tasks, currentUser }: MemberDashboardProps) {
           {assignedItems.length === 0 ? (
             <EmptyState message="All tasks completed!" />
           ) : (
-            <div className="max-h-[420px] overflow-y-auto pr-1 scrollbar-none">
+            <div className="max-h-105 overflow-y-auto pr-1 scrollbar-none">
               {assignedItems.map((task) => (
                 <TaskRow key={task._id} task={task} showAssignee={false} />
               ))}

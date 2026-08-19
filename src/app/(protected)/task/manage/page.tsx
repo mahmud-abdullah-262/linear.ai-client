@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import ManageTasksClient from "@/components/task/ManageTasksClient";
 import { serverFetch } from "@/lib/action/(core)/serverfetch";
 import type { CurrentUser} from "@/types/dashboard";
+import { getUserList } from "@/lib/getUserList";
 
 const page = async () => {
   const session = await auth.api.getSession({
@@ -31,6 +32,9 @@ const page = async () => {
   };
 
 
+    const users = currentUser.role === 'admin' 
+    ? await getUserList()  
+    : null;
 
   let tasks = await serverFetch('/api/tasks');
   console.log(tasks);
@@ -45,7 +49,7 @@ const page = async () => {
 
   return (
     <div className="pt-24 bg-[#0B0F19]">
-      <ManageTasksClient tasks={tasks} currentUser={currentUser} initialLoading={false} />
+      <ManageTasksClient tasks={tasks} currentUser={currentUser} users={users ?? { users: [], total: 0 }} initialLoading={false} />
     </div>
   );
 };

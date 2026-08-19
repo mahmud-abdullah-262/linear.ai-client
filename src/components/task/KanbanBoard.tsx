@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { Task, TaskStatus, CurrentUser } from '@/types/dashboard';
+import type { Task, TaskStatus, CurrentUser, Users } from '@/types/dashboard';
 import { ALL_STATUSES } from '../../lib/constants';
 import { KanbanColumn } from '../task/KanbanColumn';
 
@@ -9,11 +9,12 @@ interface KanbanBoardProps {
   columns: Record<TaskStatus, Task[]>;
   isLoading: boolean;
   currentUser: CurrentUser;
+  users: Users | null ;
   onStatusChange: (taskId: string, newStatus: TaskStatus) => void;
   onDelete: (taskId: string) => void;
 }
 
-export function KanbanBoard({ columns, isLoading, currentUser, onStatusChange, onDelete }: KanbanBoardProps) {
+export function KanbanBoard({ columns, isLoading, currentUser, users, onStatusChange, onDelete }: KanbanBoardProps) {
   const [activeFilter, setActiveFilter] = useState<TaskStatus | 'All'>('All');
 
   const visibleStatuses = activeFilter === 'All' ? ALL_STATUSES : [activeFilter];
@@ -54,6 +55,7 @@ export function KanbanBoard({ columns, isLoading, currentUser, onStatusChange, o
               tasks={columns[status] || []}
               isLoading={isLoading}
               currentUser={currentUser}
+              users={users ?? { users: [], total: 0 }}
               onStatusChange={onStatusChange}
               onDelete={onDelete}
             />

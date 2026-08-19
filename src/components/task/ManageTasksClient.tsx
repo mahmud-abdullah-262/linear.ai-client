@@ -13,9 +13,10 @@ interface ManageTasksClientProps {
   tasks: Task[];
   currentUser: CurrentUser;
   initialLoading?: boolean;
+  users: Users | null
 }
 
-export default function ManageTasksClient({ tasks, currentUser, initialLoading = false }: ManageTasksClientProps) {
+export default function ManageTasksClient({ tasks, currentUser, users, initialLoading = false }: ManageTasksClientProps) {
   const [isLoading, setIsLoading] = useState(initialLoading);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
@@ -73,6 +74,7 @@ export default function ManageTasksClient({ tasks, currentUser, initialLoading =
             currentUser={currentUser}
             onStatusChange={handleStatusChange}
             onDelete={handleDeleteTask}
+            users ={users ?? null}
           />
 
           <AiCopilotSidebar tasks={tasks} isOpen={isSidebarOpen} onOpenChange={setIsSidebarOpen} currentUser={currentUser} />
