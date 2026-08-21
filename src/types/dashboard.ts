@@ -16,19 +16,19 @@ export interface TaskCreator {
   name: string;
 }
 
-export interface Task {
-  _id: string;
-  title: string;
-  shortDescription: string;
-  fullDescription: string;
-  status: TaskStatus;
-  priority: TaskPriority;
-  tags: string[];
-  assignedTo: TaskUser;
-  createdBy: TaskCreator;
-  createdAt?: string;
-  updatedAt?: string;
-}
+// export interface Task {
+//   _id: string;
+//   title: string;
+//   shortDescription: string;
+//   fullDescription: string;
+//   status: TaskStatus;
+//   priority: TaskPriority;
+//   tags: string[];
+//   assignedTo: TaskUser;
+//   createdBy: TaskCreator;
+//   createdAt?: string;
+//   updatedAt?: string;
+// }
 
 // ── Current User ─────────────────────────────────────────────────────────────
 

@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import { MotionButton, CriticalPulseDot } from '@/components/shared/MotionWrapper';
-import type { Task, TaskStatus, CurrentUser, Users } from '@/types/dashboard';
+import type {  TaskStatus, CurrentUser, Users } from '@/types/dashboard';
 import { ALL_STATUSES } from '../../lib/constants';
 import { getPriorityStyles } from '../../lib/utils';
 import Image from 'next/image';
+import { TaskReAssignModal } from './TaskReAssignModal';
+import { Task } from '@/types/taskTypes';
 
 
 
@@ -51,7 +53,7 @@ export function TaskCard({ task, currentUser, users, onStatusChange, onDelete }:
         <div className="flex items-center justify-between">
           <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Move Status</span>
           {currentUser.role === 'admin' && (
-            <div className='flex flex-col'>
+            <div className='flex space-x-2'>
              <MotionButton
               onClick={() => onDelete(task._id)}
               className="text-sm text-red-400 hover:text-red-300 font-bold flex items-center gap-1 transition-colors cursor-pointer"
@@ -67,6 +69,7 @@ export function TaskCard({ task, currentUser, users, onStatusChange, onDelete }:
               </svg>
               Delete
             </MotionButton>
+            <TaskReAssignModal task={task} users={users}/>
 
       
             </div>
