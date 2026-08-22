@@ -2,8 +2,9 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { serverFetch } from '@/lib/action/(core)/serverfetch';
-import type { Task, CurrentUser } from '@/types/dashboard';
+import type {  CurrentUser } from '@/types/dashboard';
 import DashboardClient from '@/components/dashboard/DashboardClient';
+import { Task } from '@/types/taskTypes';
 
 export const metadata = {
   title: 'Dashboard · Linear.ai',
@@ -43,6 +44,7 @@ export default async function DashboardPage() {
   try {
     const data = await serverFetch('/api/tasks');
     tasks = Array.isArray(data) ? (data as Task[]) : [];
+    console.log(tasks, 'tasks')
   } catch (err) {
     console.error('[Dashboard] Failed to fetch tasks:', err);
     tasks = [];

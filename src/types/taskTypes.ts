@@ -27,3 +27,16 @@ export interface Task {
     createdBy: TaskCreator;
     createdAt: string;
 }
+
+interface UpdateResultType {
+  acknowledged: boolean;
+  matchedCount: number;
+  modifiedCount: number;
+  upsertedCount: number;
+  upsertedId: string | null;
+}
+
+export interface TaskUpdateResponse {
+  message: string;
+  result?: UpdateResultType
+}
